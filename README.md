@@ -30,7 +30,7 @@ Either:
 or:
 2. Absolute path to the **folder** containing the DNA and/or RNA reads specified with the --dna_reads and/or --rna_reads arguments **and** csv files specified with the --rna_list and --dna_list arguments.
 * The csv files are in a 3 column format with headers. They correspond to the library ID, file name of read 1 and file name of read 2 respectively.
-<img src='/docs/input_csv_example.png' width='500'>
+<img src='/docs/input_csv_example.PNG' width='500'>
 * This will run the pipeline on the files specified in the --rna_list and/or --dna_list only 
 
 ## Quick Start
@@ -85,11 +85,14 @@ Further usage:
 
 ## Output files
 
-**Caveat: RNA seq mapping with bowtie2 uses inputs in a "non-paired" fashion despite read pairs**
-**Caveat: RNA seq mapping with STAR uses inputs in a "paired" fashion**
-**Caveat: DNA seq mapping ALWAYS uses inputs in a "non-paired" fashion despite read pairs**
+* **Caveat: RNA seq mapping with bowtie2 uses inputs in a "non-paired" fashion despite read pairs**
+* **Caveat: RNA seq mapping with STAR uses inputs in a "paired" fashion**
+* **Caveat: DNA seq mapping ALWAYS uses inputs in a "non-paired" fashion despite read pairs**
+
 It is preferable to map metagenomic reads to pangenomes (bacterial or eukaryotic) in a **non-paired** fashion despite paired-end data due to variable gene order in microbial strains.
+
 It is preferable to map reads in a **non-paired** fashion to bacterial pangenomes despite paired-end data due to polycistronic RNAs. [Read this.](https://github.com/biobakery/humann#humann-30-and-paired-end-sequencing-data)
+
 Mapping **RNA reads with STAR** assumes a eukaryotic/fungal pangenome, mono-cistronic RNAs and will **use paired reads and output paired read counts**. 
 
 * reads/DNA (for metagenomes) or reads/RNA (for metatranscriptomes)
