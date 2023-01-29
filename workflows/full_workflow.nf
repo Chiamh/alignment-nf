@@ -203,7 +203,7 @@ if (params.process_rna && params.rna_list){
     Channel
 	.fromPath( params.rna_list )
 	.splitCsv(header:true) //Read in 3 column csv file with the headers: id, read1 and read2
-	.map { row-> tuple(row.id, tuple(file(params.rna_reads + row.read1,checkIfExists: true), file(params.rna_reads + row.read2,checkIfExists: true))) }
+	.map { row-> tuple(row.id, tuple(file(params.rna_reads + "/" + row.read1,checkIfExists: true), file(params.rna_reads + "/" + row.read2,checkIfExists: true))) }
 	.set{ ch_rna_input }
 } else if (params.process_rna && !params.rna_list){
 	Channel.fromFilePairs( [params.rna_reads + '/**{R,.,_}{1,2}*{fastq,fastq.gz,fq,fq.gz}'], checkIfExists:true ).set{ ch_rna_input }
@@ -213,7 +213,7 @@ if (params.process_dna && params.dna_list){
     Channel
 	.fromPath( params.dna_list )
 	.splitCsv(header:true) //Read in 3 column csv file with the headers: id, read1 and read2
-	.map { row-> tuple(row.id, tuple(file(params.dna_reads + row.read1,checkIfExists: true), file(params.dna_reads + row.read2,checkIfExists: true))) }
+	.map { row-> tuple(row.id, tuple(file(params.dna_reads + "/" + row.read1,checkIfExists: true), file(params.dna_reads + "/" + row.read2,checkIfExists: true))) }
 	.set{ ch_dna_input }
 } else if (params.process_dna && !params.dna_list){
 	Channel.fromFilePairs( [params.dna_reads + '/**{R,.,_}{1,2}*{fastq,fastq.gz,fq,fq.gz}'], checkIfExists:true ).set{ ch_dna_input }
@@ -304,3 +304,4 @@ workflow FULL {
 			BT2ALIGN_DNA(params.bt2_idx_path, ch_dna_decont)
 		}
 	}
+}

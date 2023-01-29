@@ -31,6 +31,5 @@ process RIBOFILTER {
 	k=31 \\
 	ref=${ribokmers} stats=${sample_id}_rRNAfilter.log
 	"""
-
-	
+}
 	
