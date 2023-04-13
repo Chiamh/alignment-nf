@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Chiamh/alignment-nf is a bioinformatics pipeline that takes metagenomic **(MGX)** and/or metatranscriptomic **(MTX)** reads and aligns them to user provided pangenomes using either bowtie2 (for bacteria) or STAR (for eukaryotes)
+Chiamh/alignment-nf is a bioinformatics pipeline that takes metagenomic **(MGX)** and/or metatranscriptomic **(MTX)** reads and aligns them to user provided pangenomes using either Bowtie2 (for bacteria) or STAR or Salmon (for eukaryotes)
 
 The pipeline is built using [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) , a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. 
 It uses Docker containers (also compatible with Singularity) for ease of installation and computational reproducibility. 
