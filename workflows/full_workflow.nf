@@ -133,15 +133,15 @@ if (!params.ribokmers && params.remove_rRNA && params.process_rna){
 if (params.map && params.process_rna && params.rna_mapper == null ){
     helpMessage()
     log.info"""
-    [Error] Specify a valid --rna_mapper either bowtie2 or star
+    [Error] Specify a valid --rna_mapper either bowtie2, star or salmon
     """.stripIndent()
     exit 0
 }
 
-if (params.map && params.process_rna && params.rna_mapper != 'bowtie2' && params.rna_mapper != 'star' ){
+if (params.map && params.process_rna && params.rna_mapper != 'bowtie2' && params.rna_mapper != 'star' && params.rna_mapper != 'salmon'){
     helpMessage()
     log.info"""
-    [Error] Specify a valid --rna_mapper either bowtie2 or star
+    [Error] Specify a valid --rna_mapper either bowtie2, star or salmon
     """.stripIndent()
     exit 0
 }
