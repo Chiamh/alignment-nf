@@ -42,9 +42,9 @@ or:
 
 3. Clone the pipeline and refer to the help message
 	```sh
-	$ git clone https://github.com/Chiamh/alignment-nf
+	git clone https://github.com/Chiamh/alignment-nf
 	
-	$ nextflow run ./alignment-nf/main.nf --help
+	nextflow run ./alignment-nf/main.nf --help
 	```
 * Add a custom config file which contains the paths to various pre-installed databases. Refer to the awsbatch.config file in this repo for an example. 
 * Add a custom profile in the nextflow.config file, allowing you to specify the use of docker or singularity, and/or a task scheduler.  
@@ -52,14 +52,14 @@ or:
 4. Make sure all helper scripts in alignment-nf/bin have execute permissions
 
 	```sh
-	$ cd bin/
-	$ chmod +x *
+	cd bin/
+	chmod +x *
 	```
 
 5. Run the pipeline
 
 	```sh
-	$ nextflow run ./alignment-nf/main.nf -profile docker,your_profile --rna_reads /path/to/metatranscriptomes --dna_reads /path/to/metagenomes --outdir /path/to/results
+	nextflow run ./alignment-nf/main.nf -profile docker,your_profile --rna_reads /path/to/metatranscriptomes --dna_reads /path/to/metagenomes --outdir /path/to/results
 	```
 	
 * You can specify multiple profiles separated by comma, e.g. -profile docker,sge.
@@ -71,7 +71,7 @@ Further usage:
 
 	```sh
 	#Runs the pipeline but skips preprocessing with fastp, host removal (decontamination), rRNA removal and RNA sequence de-duplication.
-	$ nextflow run ./alignment-nf/main.nf -profile docker,your_profile --rna_reads /path/to/metatranscriptomes --dna_reads /path/to/metagenomes --outdir /path/to/results \
+	nextflow run ./alignment-nf/main.nf -profile docker,your_profile --rna_reads /path/to/metatranscriptomes --dna_reads /path/to/metagenomes --outdir /path/to/results \
 	--preprocess false --decont false --remove_rRNA false --dedupe false --map true --rna_mapper bowtie2 --save_intermediates false
 	
 	#Runs the pipeline but only process DNA reads (metagenomes)
