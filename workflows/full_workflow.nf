@@ -43,6 +43,7 @@ def helpMessage() {
       --ribokmers                   Path to the eukaryotic and prokaryotic ribokmer database for computational rRNA removal using BBmap
       --bt2_idx_path                Path to the folder with bowtie2 index for custom-built microbial pangenome/gene catalog
       --bt2_idx_name                Name of the bowtie2 index for the pangenome/gene catalog e.g. IHSMGC
+	  --salmon_index                Path to the folder with the salmon index for decoy aware multi-species or single species transcriptome
     Workflow options:
       --process_rna                 Turns on steps to process metatranscriptomes [Default: true]. If true, --rna_reads is a mandatory argument
       --process_dna                 Turns on steps to process metagenomes [Default: true]. If true, --dna_reads is a mandatory argument
@@ -51,7 +52,7 @@ def helpMessage() {
 	  --remove_rRNA                 Remove ribosomal RNA reads
 	  --dedupe                      Deduplication for metatranscriptomes [Default: true]
 	  --map                         Map MGX and MTX reads to pangenomes [Default: true]
-      --rna_mapper                  Choice of which mapper to use for metatranscriptome read mapping. Choose from: bowtie2 or star [Default: bowtie2]
+      --rna_mapper                  Choice of which mapper to use for metatranscriptome read mapping. Choose from: bowtie2, star or salmon [Default: bowtie2]
 	  --save_intermediates          Copy intermediate files to output directory [Default: true]
     Output arguments:
       --outdir                      The output directory where the results will be saved [Default: ./pipeline_results]
@@ -170,6 +171,14 @@ if (params.map && !params.star_index && params.process_rna && params.rna_mapper 
     exit 0
 }
 
+if (params.map && !params.salmon_index && params.process_rna && params.rna_mapper == 'salmon'){
+    helpMessage()
+    log.info"""
+    [Error] --salmon_index is required for pseudoalignment of MTX reads to transcriptome
+    """.stripIndent()
+    exit 0
+}
+
 if (params.map && !params.bt2_idx_path && params.process_dna){
     helpMessage()
     log.info"""
@@ -235,6 +244,7 @@ include { DEDUP } from '../modules/dedup.nf'
 include { BT2ALIGN_RNA } from '../modules/bt2align_rna.nf'
 include { BT2ALIGN_DNA } from '../modules/bt2align_dna.nf'
 include { STARALIGN_RNA } from '../modules/staralign_rna.nf'
+include { SALMON } from '../modules/salmon.nf'
 include { DECONT_DNA } from '../modules/decont_dna.nf'
 include { DECONT_RNA } from '../modules/decont_rna.nf'
 
@@ -282,6 +292,8 @@ workflow FULL {
 			BT2ALIGN_RNA(params.bt2_idx_path, ch_rna_decont)
 			} else if ( params.map && params.rna_mapper == 'star' ){
 				STARALIGN_RNA(params.star_index, ch_rna_decont)
+				} else if ( params.map && params.rna_mapper == 'salmon' ) { 
+					SALMON(params.salmon_index, ch_rna_decont)
 				}
 	}
     

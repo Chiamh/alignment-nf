@@ -55,6 +55,7 @@ def helpMessage() {
       --ribokmers                   Path to the eukaryotic and prokaryotic ribokmer database for computational rRNA removal using BBmap
       --bt2_idx_path                Path to the folder with bowtie2 index for custom-built microbial pangenome/gene catalog
       --bt2_idx_name                Name of the bowtie2 index for the pangenome/gene catalog e.g. IHSMGC
+	  --salmon_index                Path to the folder with the salmon index for decoy aware multi-species or single species transcriptome
     Workflow options:
       --process_rna                 Turns on steps to process metatranscriptomes [Default: true]. If true, --rna_reads is a mandatory argument
       --process_dna                 Turns on steps to process metagenomes [Default: true]. If true, --dna_reads is a mandatory argument
@@ -63,7 +64,7 @@ def helpMessage() {
 	  --remove_rRNA                 Remove ribosomal RNA reads
 	  --dedupe                      Deduplication for metatranscriptomes [Default: true]
 	  --map                         Map MGX and MTX reads to pangenomes [Default: true]
-      --rna_mapper                  Choice of which mapper to use for metatranscriptome read mapping. Choose from: bowtie2 or star [Default: bowtie2]
+      --rna_mapper                  Choice of which mapper to use for metatranscriptome read mapping. Choose from: bowtie2, star or salmon [Default: bowtie2]
       --save_intermediates          Copy intermediate files to output directory [Default: true]
     Output arguments:
       --outdir                      The output directory where the results will be saved [Default: ./pipeline_results]

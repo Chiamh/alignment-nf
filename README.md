@@ -21,7 +21,8 @@ Every step in this pipeline is optional and can be toggled on or off.
 2. Removal of host (human) reads using STAR (2.7.9a), a splice aware aligner.
 3. Computational removal of prokaryotic and eukaryotic rRNAs using a k-mer based strategy with bbmap (38.93)
 4. Sequence de-duplication using bbmap (38.93) clumpify.sh
-5. Mapping DNA reads to a microbial pangenome of choice using either bowtie2 (2.4.4) or STAR (2.7.9a)
+5. Mapping RNA reads to a microbial pangenome of choice using either bowtie2 (2.4.4) or STAR (2.7.9a) or pseudoalignment to a [decoy aware] (https://combine-lab.github.io/alevin-tutorial/2019/selective-alignment/) multi-species/single species transcriptome with Salmon (v 1.10.1)
+
 
 ## Input requirements
 Either:
@@ -80,7 +81,10 @@ Further usage:
 	nextflow run ./alignment-nf/main.nf -profile docker,your_profile --rna_reads /path/to/metatranscriptomes --outdir /path/to/results --process_dna false
 	
 	#Runs the pipeline using STAR to map RNA reads to a eukaryotic/fungal pangenome.
-	nextflow run ./alignment-nf/main.nf -profile docker,your_profile --rna_reads /path/to/metatranscriptomes --outdir /path/to/results --process_dna false --rna_mapper
+	nextflow run ./alignment-nf/main.nf -profile docker,your_profile --rna_reads /path/to/metatranscriptomes --outdir /path/to/results --process_dna false --rna_mapper star
+	
+	#Runs the pipeline using Salmon to map RNA reads to a eukaryotic transcriptome (can be multi-species).
+	nextflow run ./alignment-nf/main.nf -profile docker,your_profile --rna_reads /path/to/metatranscriptomes --outdir /path/to/results --process_dna false --rna_mapper salmon
 	```
 
 ## Output files
@@ -93,7 +97,9 @@ It is preferable to map metagenomic reads to pangenomes (bacterial or eukaryotic
 
 It is preferable to map reads in a **non-paired** fashion to bacterial pangenomes despite paired-end data due to polycistronic RNAs. [Read this.](https://github.com/biobakery/humann#humann-30-and-paired-end-sequencing-data)
 
-Mapping **RNA reads with STAR** assumes a eukaryotic/fungal pangenome, mono-cistronic RNAs and will **use paired reads and output paired read counts**. 
+Mapping **RNA reads with STAR** assumes a eukaryotic/fungal genome or pangenome, mono-cistronic RNAs and will **use paired reads and output paired read counts**. 
+
+Pseudoalignment of **RNA reads with Salmon** to multi-species transcriptome is also possible. This is especially useful for eukaryotic species without a well-annotated pangenome.
 
 * reads/DNA (for metagenomes) or reads/RNA (for metatranscriptomes)
     * These folders contain processedd reads in fastq.gz format. "Processed" means adapter removal, host read removal, rRNA removal (for MTX) and/or de-duplication (for MTX)
@@ -108,11 +114,13 @@ Mapping **RNA reads with STAR** assumes a eukaryotic/fungal pangenome, mono-cist
 	* \*bt2_microbe_pangenome_filtered_cov.tsv : Tab separated file containing unpaired read coverage across pangenes. Only pangenes with >= 50% coverage are reported here.
 	* \*bt2_microbe_pangenome.fastq.gz : All reads that did not align to the pangene catalog.
 
-* STAR_out/ (for metatranscriptomes only) aligned to pangenome using STAR
+* STAR_out/ (for metatranscriptomes only) RNA aligned to pangenome using STAR
     * \*star_microbe_pangenome_aligned.bam : BAM file after alignment of reads (PAIRED manner) to pangene catalog.
 	* \*star_microbe_pangenome_filtered_cov.tsv : Tab separated file containing PAIRED read coverage across pangenes. Only pangenes with >= 50% coverage are reported here.
 	* \*star_microbe_pangenome.fastq.gz : All reads that did not align to the pangene catalog.
 	
+* salmon_out/ (for metatranscriptomes only) RNA pseudoalignment to transcriptome using Salmon
+	* \*_quant.sf 
 
 ## Contact
 
