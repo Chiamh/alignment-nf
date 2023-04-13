@@ -41,7 +41,7 @@ or:
 2. Install [`Docker`](https://docs.docker.com/engine/installation/)   
 
 3. Clone the pipeline and refer to the help message
-	```sh
+	```
 	git clone https://github.com/Chiamh/alignment-nf
 	
 	nextflow run ./alignment-nf/main.nf --help
@@ -51,14 +51,14 @@ or:
 
 4. Make sure all helper scripts in alignment-nf/bin have execute permissions
 
-	```sh
+	```
 	cd bin/
 	chmod +x *
 	```
 
 5. Run the pipeline
 
-	```sh
+	```
 	nextflow run ./alignment-nf/main.nf -profile docker,your_profile --rna_reads /path/to/metatranscriptomes --dna_reads /path/to/metagenomes --outdir /path/to/results
 	```
 	
@@ -67,9 +67,10 @@ or:
 * You can choose whether or not to save the intermediate files to the output directory with --save_intermediates (default: true)
 * You have the flexibility to skip any of the steps in this pipeline. Look at the help message for more details
 
-Further usage:
+Further usage
 
-	```sh
+	```
+	
 	#Runs the pipeline but skips preprocessing with fastp, host removal (decontamination), rRNA removal and RNA sequence de-duplication.
 	nextflow run ./alignment-nf/main.nf -profile docker,your_profile --rna_reads /path/to/metatranscriptomes --dna_reads /path/to/metagenomes --outdir /path/to/results \
 	--preprocess false --decont false --remove_rRNA false --dedupe false --map true --rna_mapper bowtie2 --save_intermediates false
@@ -85,6 +86,7 @@ Further usage:
 	
 	#Runs the pipeline using Salmon to map RNA reads to a eukaryotic transcriptome (can be multi-species).
 	nextflow run ./alignment-nf/main.nf -profile docker,your_profile --rna_reads /path/to/metatranscriptomes --outdir /path/to/results --process_dna false --rna_mapper salmon
+	
 	```
 
 ## Output files
