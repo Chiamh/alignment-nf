@@ -21,7 +21,7 @@ Every step in this pipeline is optional and can be toggled on or off.
 2. Removal of host (human) reads using STAR (2.7.9a), a splice aware aligner.
 3. Computational removal of prokaryotic and eukaryotic rRNAs using a k-mer based strategy with bbmap (38.93)
 4. Sequence de-duplication using bbmap (38.93) clumpify.sh
-5. Mapping RNA reads to a microbial pangenome of choice using either bowtie2 (2.4.4) or STAR (2.7.9a) or pseudoalignment to a [decoy aware] (https://combine-lab.github.io/alevin-tutorial/2019/selective-alignment/) multi-species/single species transcriptome with Salmon (v 1.10.1)
+5. Mapping RNA reads to a microbial pangenome of choice using either bowtie2 (2.4.4) or STAR (2.7.9a) or pseudoalignment to a [decoy aware](https://combine-lab.github.io/alevin-tutorial/2019/selective-alignment/) multi-species/single species transcriptome with Salmon (v 1.10.1)
 
 
 ## Input requirements
