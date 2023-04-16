@@ -286,7 +286,9 @@ workflow FULL {
 				ch_rna_decont = DEDUP.out.reads
 				} else if ( !params.remove_rRNA && !params.dedupe ){
 					ch_rna_decont = ch_qc_reads
-					}
+					} else if ( params.remove_rRNA && !params.dedupe ){
+						ch_rna_decont = RIBOFILTER.out.reads
+						}
 	
 		if ( params.map && params.rna_mapper == 'bowtie2' ){
 			BT2ALIGN_RNA(params.bt2_idx_path, ch_rna_decont)

@@ -18,7 +18,7 @@ process RIBOFILTER {
 	tuple val(sample_id), path(reads)
 	
 	output:
-	tuple val(sample_id), path("${sample_id}*_{1,2}.fastq.gz"), emit: reads
+	tuple val(sample_id), path("${sample_id}_mRNA_{1,2}.fastq.gz"), emit: reads
 	tuple val(sample_id), path("*_rRNAfilter.log") , emit: logs
 	
 	when:
