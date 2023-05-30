@@ -52,8 +52,7 @@ or:
 4. Make sure all helper scripts in alignment-nf/bin have execute permissions
 
 	```
-	cd bin/
-	chmod +x *
+	chmod +x ./alignment-nf/bin/*
 	```
 
 5. Run the pipeline
@@ -66,6 +65,7 @@ or:
 * Delete the work/ directory after running the pipeline to free up space taken up by intermediate files
 * You can choose whether or not to save the intermediate files to the output directory with --save_intermediates (default: true)
 * You have the flexibility to skip any of the steps in this pipeline. Look at the help message for more details
+* If using awsbatch, you need to specify an S3 bucket as a work directory with the -bucket-dir argument
 
 Further usage
 
@@ -124,6 +124,39 @@ Pseudoalignment of **RNA reads with Salmon** to multi-species transcriptome is a
 * salmon_out/ (for metatranscriptomes only) RNA pseudoalignment to transcriptome using Salmon
 	* \*_quant.sf 
 
+## Alternative workflows
+
+### Concatenate
+The "concatenate" subworkflow merges fastq.gz files across different lanes for the same sample ID.
+**Inputs**
+Absolute path to the **folder** containing the DNA and/or RNA reads specified with the --dna_reads and/or --rna_reads arguments. 
+* This will search the folder(s) recursively for fastq files and run the pipeline on all of them.
+
+	```
+	nextflow run ./alignment-nf/main.nf -profile docker,your_profile -entry concatenate --rna_reads /path/to/metatranscriptomes --dna_reads /path/to/metagenomes --outdir /path/to/results
+	
+	```
+	
+### bamtofastq
+The "bamtofastq" subworkflow extracts non-host reads (both R1 and R2 unmapped) from sam/bam/cram files which were produced by alignment to a host reference.
+* Outputs fastq.gz files.
+* Also generates flagstat.tsv files. The first column contains the values for QC-passed reads (not read pairs!), the second column has the values for QC-failed reads and the third contains the category names.
+* Singleton non-host reads are saved to a separate results folder.
+	
+**Inputs**
+Either:
+1. Absolute path to the **folder** containing the DNA and/or RNA reads specified with the --dna_reads and/or --rna_reads arguments. 
+* This will search the folder(s) recursively for sam/bam/cram files and run the pipeline on all of them.
+or:
+2. Absolute path to the **folder** containing the DNA and/or RNA reads specified with the --dna_reads and/or --rna_reads arguments **and** csv files specified with the --rna_list and --dna_list arguments.
+* The csv files are in a two column format with headers. They correspond to the library ID, and file name of alignment file.
+<img src='/docs/input_csv_example2.PNG' width='350'>
+* This will run the pipeline on the files specified in the --rna_list and/or --dna_list only 
+	
+	```
+	nextflow run ./alignment-nf/main.nf -profile docker,your_profile -entry bamtofastq --rna_reads /path/to/RNA_bam_files --dna_reads /path/to/DNA_bam_files --outdir /path/to/results
+	
+	```
 ## Contact
 
 Minghao Chia: chia_minghao@gis.a-star.edu.sg, chiaminghao@gmail.com

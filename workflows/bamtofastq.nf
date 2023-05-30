@@ -1,14 +1,4 @@
-#!/usr/bin/env nextflow
-
-/*
-========================================================================================
-    Meta-omic sequence alignment
-========================================================================================
-    Github : https://github.com/Chiamh/alignment-nf
-----------------------------------------------------------------------------------------
-*/
-
-nextflow.enable.dsl=2
+// WORKFLOW file for getting flagstats and unmapped (non-host) reads in *fastq.gz format from *.bam/*.cram files (assuming alignment to host genome)
 
 /*
 ========================================================================================
@@ -36,7 +26,7 @@ def helpMessage() {
 	
     IMPT: Set either the --process_rna or --process_dna arguments to false if no RNA or DNA reads are provided, respsectively. 
     
-    The main workflow can take up a lot of disk space with intermediate fastq files. 
+    The main workflow can take up a lot of disk space with intermediate fastq files. Be sure to clean up the work directory after the pipeline has finished.
 	You can set the --save_intermediates flag to false to avoid copying large intermediates in the output folder. 
            
     Input and database arguments are null by default.
@@ -50,7 +40,7 @@ def helpMessage() {
     Database arguments:
       --bwaidx_path                 Path to the folder with host (e.g. human) reference genome and bwa index for decont
       --bwaidx			            Name of the bwa index for decont e.g. hg38.fa
-      --decont_star_index           Path to the directory containing the index for the host (e.g. human) genome for STAR aligner
+	  --decont_star_index           Path to the directory containing the index for the host (e.g. human) genome for STAR aligner
       --star_index                  Path to the directory containing the index for pangenome mapping using STAR
       --ribokmers                   Path to the eukaryotic and prokaryotic ribokmer database for computational rRNA removal using BBmap
       --bt2_idx_path                Path to the folder with bowtie2 index for custom-built microbial pangenome/gene catalog
@@ -65,7 +55,7 @@ def helpMessage() {
 	  --dedupe                      Deduplication for metatranscriptomes [Default: true]
 	  --map                         Map MGX and MTX reads to pangenomes [Default: true]
       --rna_mapper                  Choice of which mapper to use for metatranscriptome read mapping. Choose from: bowtie2, star or salmon [Default: bowtie2]
-      --save_intermediates          Copy intermediate files to output directory [Default: true]
+	  --save_intermediates          Copy intermediate files to output directory [Default: true]
     Output arguments:
       --outdir                      The output directory where the results will be saved [Default: ./pipeline_results]
       --tracedir                    The directory where nextflow logs will be saved [Default: ./pipeline_results/pipeline_info]
@@ -83,42 +73,86 @@ if (params.help){
 }
 
 
+
+if (!params.rna_reads && !params.dna_reads){
+    helpMessage()
+    log.info"""
+    [Error] The path to at least one input folder for sequences is required
+    """.stripIndent()
+    exit 0
+}
+
+if (!params.rna_reads && params.process_rna){
+    helpMessage()
+    log.info"""
+    [Error] The path to input RNA sequences is required because --process_rna is true
+    """.stripIndent()
+    exit 0
+}
+
+if (!params.dna_reads && params.process_dna){
+    helpMessage()
+    log.info"""
+    [Error] The path to input DNA sequences is required because --process_dna is true
+    """.stripIndent()
+    exit 0
+}
+
+
+/*
+========================================================================================
+    Define channels for bam or cram files
+========================================================================================
+*/
+//Just an example:
+//params.rna_reads = "$baseDir/data/raw_fastq/rna/*{1,2}.{sam,bam,cram}"
+//params.dna_reads = "$baseDir/data/raw_fastq/dna/*{1,2}.{sam,bam,cram}"
+//https://nextflow-io.github.io/patterns/process-per-csv-record/
+// The channel should look like this: [SRR493366, [/my/data/SRR493366.cram]]
+
+if (params.process_rna && params.rna_list){
+    Channel
+	.fromPath( params.rna_list )
+	.splitCsv(header:true) //Read in TWO column csv file with the headers: id, alignment_file
+	.map { row-> tuple(row.id, tuple(file(params.rna_reads + "/" + row.alignment_file,checkIfExists: true))) }
+	.set{ ch_rna_input }
+} else if (params.process_rna && !params.rna_list){
+	Channel.fromFilePairs( [params.rna_reads + '/**{sam,bam,cram}'], checkIfExists:true, size: 1 ).set{ ch_rna_input }
+}
+
+if (params.process_dna && params.dna_list){
+    Channel
+	.fromPath( params.dna_list )
+	.splitCsv(header:true) //Read in TWO column csv file with the headers: id, alignment_file
+	.map { row-> tuple(row.id, tuple(file(params.dna_reads + "/" + row.alignment_file,checkIfExists: true))) }
+	.set{ ch_dna_input }
+} else if (params.process_dna && !params.dna_list){
+	Channel.fromFilePairs( [params.dna_reads + '/**{sam,bam,cram}'], checkIfExists:true, size: 1 ).set{ ch_dna_input }
+}
+
+
 /*
 ========================================================================================
     Include modules
 ========================================================================================
 */
 
-include { FULL } from './workflows/full_workflow.nf'
-include { CONCATENATE } from './workflows/concatenate.nf'
-include { BAMTOFASTQ } from './workflows/bamtofastq.nf'
+include { BAM_TO_FASTQ_RNA } from '../modules/bamtofastq_rna.nf'
+include { BAM_TO_FASTQ_DNA } from '../modules/bamtofastq_dna.nf'
 
 /*
 ========================================================================================
-    Main workflow (default)
+    Named workflow
 ========================================================================================
 */
 
-// this is the main workflow
-workflow {
-    
-    FULL ()
-     
+workflow BAMTOFASTQ {
+
+if (params.process_rna){
+    BAM_TO_FASTQ_RNA(rna_reads)
+}
+if (params.process_dna){
+    BAM_TO_FASTQ_DNA(dna_reads)
 }
 
-// Use the concatenate workflow to join fastq files across different lanes by libid. Specify path to raw reads with --rna_reads and/or --dna_reads
-workflow concatenate {
-
-    CONCATENATE ()
 }
-
-// Use the bamtofastq workflow to extract non-host reads from a sam/bam/cram file previously aligned to a host reference.
-workflow bamtofastq {
-
-	BAMTOFASTQ ()
-}
-
-
-
-
-
