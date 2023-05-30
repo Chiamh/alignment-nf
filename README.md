@@ -27,8 +27,8 @@ Every step in this pipeline is optional and can be toggled on or off.
 ## Input requirements
 Either:
 1. Absolute path to the **folder** containing the DNA and/or RNA reads specified with the --dna_reads and/or --rna_reads arguments. 
-* This will search the folder(s) recursively for fastq files and run the pipeline on all of them.
-or:
+* This will search the folder(s) recursively for fastq files and run the pipeline on all of them.\
+or:  
 2. Absolute path to the **folder** containing the DNA and/or RNA reads specified with the --dna_reads and/or --rna_reads arguments **and** csv files specified with the --rna_list and --dna_list arguments.
 * The csv files are in a 3 column format with headers. They correspond to the library ID, file name of read 1 and file name of read 2 respectively.
 <img src='/docs/input_csv_example.PNG' width='500'>
@@ -104,7 +104,7 @@ Mapping **RNA reads with STAR** assumes a eukaryotic/fungal genome or pangenome,
 Pseudoalignment of **RNA reads with Salmon** to multi-species transcriptome is also possible. This is especially useful for eukaryotic species without a well-annotated pangenome.
 
 * reads/DNA (for metagenomes) or reads/RNA (for metatranscriptomes)
-    * These folders contain processedd reads in fastq.gz format. "Processed" means adapter removal, host read removal, rRNA removal (for MTX) and/or de-duplication (for MTX)
+    * These folders contain processed reads in fastq.gz format. "Processed" means adapter removal, host read removal, rRNA removal (for MTX) and/or de-duplication (for MTX)
 	* If --save_intermediates is true, there will be a temp/ subfolder containing the intermediate files
 	* \*_fastp_{1,2}.fastq.gz are reads that have been preprocessed by fastp. This step occurs before decontamination.
 	* \*_host_unmapped_{1,2}.fastq.gz are reads that do not map to host reference genome. The removal of host reads is called "decontamination" in this workflow.
@@ -127,8 +127,8 @@ Pseudoalignment of **RNA reads with Salmon** to multi-species transcriptome is a
 ## Alternative workflows
 
 ### Concatenate
-The "concatenate" subworkflow merges fastq.gz files across different lanes for the same sample ID.
-**Inputs**
+The "concatenate" subworkflow merges fastq.gz files across different lanes for the same sample ID.\
+**Inputs**\
 Absolute path to the **folder** containing the DNA and/or RNA reads specified with the --dna_reads and/or --rna_reads arguments. 
 * This will search the folder(s) recursively for fastq files and run the pipeline on all of them.
 
@@ -141,16 +141,16 @@ Absolute path to the **folder** containing the DNA and/or RNA reads specified wi
 The "bamtofastq" subworkflow extracts non-host reads (both R1 and R2 unmapped) from sam/bam/cram files which were produced by alignment to a host reference.
 * Outputs fastq.gz files.
 * Also generates flagstat.tsv files. The first column contains the values for QC-passed reads (not read pairs!), the second column has the values for QC-failed reads and the third contains the category names.
-* Singleton non-host reads are saved to a separate results folder.
+* Singleton non-host reads are saved to a separate results folder.\
 	
-**Inputs**
-Either:
+**Inputs**\
+Either:\
 1. Absolute path to the **folder** containing the DNA and/or RNA reads specified with the --dna_reads and/or --rna_reads arguments. 
-* This will search the folder(s) recursively for sam/bam/cram files and run the pipeline on all of them.
-or:
+* This will search the folder(s) recursively for sam/bam/cram files and run the pipeline on all of them.\
+or:  
 2. Absolute path to the **folder** containing the DNA and/or RNA reads specified with the --dna_reads and/or --rna_reads arguments **and** csv files specified with the --rna_list and --dna_list arguments.
 * The csv files are in a two column format with headers. They correspond to the library ID, and file name of alignment file.
-<img src='/docs/input_csv_example2.PNG' width='350'>
+<img src='/docs/input_csv_example2.PNG' width='350' height='175'>
 * This will run the pipeline on the files specified in the --rna_list and/or --dna_list only 
 	
 	```
