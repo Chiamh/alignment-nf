@@ -27,7 +27,7 @@ Every step in this pipeline is optional and can be toggled on or off.
 ## Input requirements
 Either:
 1. Absolute path to the **folder** containing the DNA and/or RNA reads specified with the --dna_reads and/or --rna_reads arguments. 
-* This will search the folder(s) recursively for fastq files and run the pipeline on all of them.\
+* This will search the folder(s) recursively for fastq files and run the pipeline on all of them.  
 or:  
 2. Absolute path to the **folder** containing the DNA and/or RNA reads specified with the --dna_reads and/or --rna_reads arguments **and** csv files specified with the --rna_list and --dna_list arguments.
 * The csv files are in a 3 column format with headers. They correspond to the library ID, file name of read 1 and file name of read 2 respectively.
@@ -144,13 +144,13 @@ The "bamtofastq" subworkflow extracts non-host reads (both R1 and R2 unmapped) f
 * Singleton non-host reads are saved to a separate results folder.\
 	
 **Inputs**\
-Either:\
+Either:  
 1. Absolute path to the **folder** containing the DNA and/or RNA reads specified with the --dna_reads and/or --rna_reads arguments. 
-* This will search the folder(s) recursively for sam/bam/cram files and run the pipeline on all of them.\
+* This will search the folder(s) recursively for sam/bam/cram files and run the pipeline on all of them.  
 or:  
 2. Absolute path to the **folder** containing the DNA and/or RNA reads specified with the --dna_reads and/or --rna_reads arguments **and** csv files specified with the --rna_list and --dna_list arguments.
 * The csv files are in a two column format with headers. They correspond to the library ID, and file name of alignment file.
-<img src='/docs/input_csv_example2.PNG' width='350' height='175'>
+<img src='/docs/input_csv_example2.PNG' width='183' height='63'>
 * This will run the pipeline on the files specified in the --rna_list and/or --dna_list only 
 	
 	```
