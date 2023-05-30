@@ -141,7 +141,8 @@ Absolute path to the **folder** containing the DNA and/or RNA reads specified wi
 The "bamtofastq" subworkflow extracts non-host reads (both R1 and R2 unmapped) from sam/bam/cram files which were produced by alignment to a host reference.
 * Outputs fastq.gz files.
 * Also generates flagstat.tsv files. The first column contains the values for QC-passed reads (not read pairs!), the second column has the values for QC-failed reads and the third contains the category names.
-* Singleton non-host reads are saved to a separate results folder.\
+* Singleton non-host reads are saved to a separate results folder.
+* Important: This subworkflow needs the user to specify 'input_is_bam true' in the command\
 	
 **Inputs**\
 Either:  
@@ -154,7 +155,7 @@ or:
 <img src='/docs/input_csv_example2.PNG' width='183' height='63'>
 
 	```
-	nextflow run ./alignment-nf/main.nf -profile docker,your_profile -entry bamtofastq --rna_reads /path/to/RNA_bam_files --dna_reads /path/to/DNA_bam_files --outdir /path/to/results
+	nextflow run ./alignment-nf/main.nf -profile docker,your_profile -entry bamtofastq --input_is_bam true --rna_reads /path/to/RNA_bam_files --dna_reads /path/to/DNA_bam_files --outdir /path/to/results
 	
 	```
 ## Contact

@@ -110,24 +110,24 @@ if (!params.dna_reads && params.process_dna){
 //https://nextflow-io.github.io/patterns/process-per-csv-record/
 // The channel should look like this: [SRR493366, [/my/data/SRR493366.cram]]
 
-if (params.process_rna && params.rna_list){
+if (params.process_rna && params.rna_list && params.input_is_bam){
     Channel
 	.fromPath( params.rna_list )
 	.splitCsv(header:true) //Read in TWO column csv file with the headers: id, alignment_file
 	.map { row-> tuple(row.id, tuple(file(params.rna_reads + "/" + row.alignment_file,checkIfExists: true))) }
-	.set{ ch_rna_input }
-} else if (params.process_rna && !params.rna_list){
-	Channel.fromFilePairs( [params.rna_reads + '/**{sam,bam,cram}'], checkIfExists:true, size: 1 ).set{ ch_rna_input }
+	.set{ ch_rna_bam_input }
+} else if (params.process_rna && !params.rna_list && params.input_is_bam){
+	Channel.fromFilePairs( [params.rna_reads + '/**{sam,bam,cram}'], checkIfExists:true, size: 1 ).set{ ch_rna_bam_input }
 }
 
-if (params.process_dna && params.dna_list){
+if (params.process_dna && params.dna_list && params.input_is_bam){
     Channel
 	.fromPath( params.dna_list )
 	.splitCsv(header:true) //Read in TWO column csv file with the headers: id, alignment_file
 	.map { row-> tuple(row.id, tuple(file(params.dna_reads + "/" + row.alignment_file,checkIfExists: true))) }
-	.set{ ch_dna_input }
-} else if (params.process_dna && !params.dna_list){
-	Channel.fromFilePairs( [params.dna_reads + '/**{sam,bam,cram}'], checkIfExists:true, size: 1 ).set{ ch_dna_input }
+	.set{ ch_dna_bam_input }
+} else if (params.process_dna && !params.dna_list && params.input_is_bam){
+	Channel.fromFilePairs( [params.dna_reads + '/**{sam,bam,cram}'], checkIfExists:true, size: 1 ).set{ ch_dna_bam_input }
 }
 
 
@@ -149,10 +149,10 @@ include { BAM_TO_FASTQ_DNA } from '../modules/bamtofastq_dna.nf'
 workflow BAMTOFASTQ {
 
 if (params.process_rna){
-    BAM_TO_FASTQ_RNA(rna_reads)
+    BAM_TO_FASTQ_RNA(ch_rna_bam_input)
 }
 if (params.process_dna){
-    BAM_TO_FASTQ_DNA(dna_reads)
+    BAM_TO_FASTQ_DNA(ch_dna_bam_input)
 }
 
 }

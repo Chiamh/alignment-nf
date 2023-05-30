@@ -208,23 +208,23 @@ if (params.map && !params.bt2_idx_name && params.process_dna){
 //https://nextflow-io.github.io/patterns/process-per-csv-record/
 // The channel should look like this: [SRR493366, [/my/data/SRR493366_1.fastq, /my/data/SRR493366_2.fastq]]
 
-if (params.process_rna && params.rna_list){
+if (params.process_rna && params.rna_list && !params.input_is_bam){
     Channel
 	.fromPath( params.rna_list )
 	.splitCsv(header:true) //Read in 3 column csv file with the headers: id, read1 and read2
 	.map { row-> tuple(row.id, tuple(file(params.rna_reads + "/" + row.read1,checkIfExists: true), file(params.rna_reads + "/" + row.read2,checkIfExists: true))) }
 	.set{ ch_rna_input }
-} else if (params.process_rna && !params.rna_list){
+} else if (params.process_rna && !params.rna_list && !params.input_is_bam){
 	Channel.fromFilePairs( [params.rna_reads + '/**{R,.,_}{1,2}*{fastq,fastq.gz,fq,fq.gz}'], checkIfExists:true ).set{ ch_rna_input }
 }
 
-if (params.process_dna && params.dna_list){
+if (params.process_dna && params.dna_list && !params.input_is_bam){
     Channel
 	.fromPath( params.dna_list )
 	.splitCsv(header:true) //Read in 3 column csv file with the headers: id, read1 and read2
 	.map { row-> tuple(row.id, tuple(file(params.dna_reads + "/" + row.read1,checkIfExists: true), file(params.dna_reads + "/" + row.read2,checkIfExists: true))) }
 	.set{ ch_dna_input }
-} else if (params.process_dna && !params.dna_list){
+} else if (params.process_dna && !params.dna_list && !params.input_is_bam){
 	Channel.fromFilePairs( [params.dna_reads + '/**{R,.,_}{1,2}*{fastq,fastq.gz,fq,fq.gz}'], checkIfExists:true ).set{ ch_dna_input }
 }
 
