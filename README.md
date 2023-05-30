@@ -150,9 +150,9 @@ Either:
 or:  
 2. Absolute path to the **folder** containing the DNA and/or RNA reads specified with the --dna_reads and/or --rna_reads arguments **and** csv files specified with the --rna_list and --dna_list arguments.
 * The csv files are in a two column format with headers. They correspond to the library ID, and file name of alignment file.
-<img src='/docs/input_csv_example2.PNG' width='183' height='63'>
 * This will run the pipeline on the files specified in the --rna_list and/or --dna_list only 
-	
+<img src='/docs/input_csv_example2.PNG' width='183' height='63'>
+
 	```
 	nextflow run ./alignment-nf/main.nf -profile docker,your_profile -entry bamtofastq --rna_reads /path/to/RNA_bam_files --dna_reads /path/to/DNA_bam_files --outdir /path/to/results
 	
