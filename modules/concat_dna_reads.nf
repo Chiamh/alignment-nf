@@ -4,7 +4,7 @@
 process CONCAT_DNA {
 	label "process_small"
 	tag "${sample_id}"
-	publishDir "${params.outdir}/DNA_merged"
+	publishDir "${params.outdir}/DNA_merged", mode: 'move'
 	
 	input:
 	tuple val(sample_id), path(reads)
@@ -16,9 +16,9 @@ process CONCAT_DNA {
 	"""
 	echo concatenating reads from "${sample_id}"
 	
-	cat "${sample_id}"*_1.fq.gz > "${sample_id}_merged_1.fastq.gz"
+	cat "${sample_id}"*_1*.gz > "${sample_id}_merged_1.fastq.gz"
 	
-	cat "${sample_id}"*_2.fq.gz > "${sample_id}_merged_2.fastq.gz"
+	cat "${sample_id}"*_2*.gz > "${sample_id}_merged_2.fastq.gz"
 	
 	echo finished processing "${sample_id}"
 	

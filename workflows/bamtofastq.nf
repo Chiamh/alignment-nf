@@ -63,7 +63,10 @@ def helpMessage() {
       --awsregion                   The AWS Region for your AWS Batch job to run on [Default: false]
       --awsqueue                    The AWS queue for your AWS Batch job to run on [Default: false]
     Others:
-      --help		            Display this help message
+      --cleanup						This option will enable nextflow work/temp folder cleanup upon pipeline completion (no errors).
+                                    All intermediate files from nexftlow processes' workdirs will be cleared.
+									It will not clear cached folders coming from previous pipleine runs. [Default: false]
+	  --help		            Display this help message
     """
 }
 

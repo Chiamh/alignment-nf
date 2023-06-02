@@ -130,10 +130,11 @@ Pseudoalignment of **RNA reads with Salmon** to multi-species transcriptome is a
 The "concatenate" subworkflow merges fastq.gz files across different lanes for the same sample ID.\
 **Inputs**\
 Absolute path to the **folder** containing the DNA and/or RNA reads specified with the --dna_reads and/or --rna_reads arguments. 
-* This will search the folder(s) recursively for fastq files and run the pipeline on all of them.
+* This will search the folder(s) recursively for fastq files and run the pipeline on all of them. 
+* Setting --cleanup to true could be helpful for removing large intermediate files.
 
 	```
-	nextflow run ./alignment-nf/main.nf -profile docker,your_profile -entry concatenate --rna_reads /path/to/metatranscriptomes --dna_reads /path/to/metagenomes --outdir /path/to/results
+	nextflow run ./alignment-nf/main.nf -profile docker,your_profile -entry concatenate --rna_reads /path/to/metatranscriptomes --dna_reads /path/to/metagenomes --outdir /path/to/results --cleanup true
 	
 	```
 	
