@@ -14,7 +14,7 @@ Every step in this pipeline is optional and can be toggled on or off.
 ## Pipeline summary for metagenomic reads
 1. Adapter trimming and quality control using fastp (0.22.0)
 2. Removal of host (human) reads by mapping to a reference genome using bwa (0.7.17) 
-3. Mapping DNA reads to a microbial pangenome of choice using bowtie2 (2.4.4) followed by summaries of **unpaired** read counts per feature
+3. Mapping DNA reads to a microbial pangenome of choice using bowtie2 (2.4.4) followed by summaries of (typically **unpaired**) read counts per feature
 
 ## Pipeline summary for metatranscriptomic reads
 1. Adapter trimming and quality control using fastp (0.22.0)
@@ -91,13 +91,15 @@ Further usage
 
 ## Output files
 
-* **Caveat: RNA seq mapping with bowtie2 uses inputs in a "non-paired" fashion despite read pairs**
+* **Caveat: RNA seq mapping with bowtie2 by default uses inputs in a "non-paired" fashion despite read pairs**
 * **Caveat: RNA seq mapping with STAR uses inputs in a "paired" fashion**
-* **Caveat: DNA seq mapping ALWAYS uses inputs in a "non-paired" fashion despite read pairs**
+* **Caveat: DNA seq mapping with bowtie2 by default uses inputs in a "non-paired" fashion despite read pairs**
 
 It is preferable to map metagenomic reads to pangenomes (bacterial or eukaryotic) in a **non-paired** fashion despite paired-end data due to variable gene order in microbial strains.
 
 It is preferable to map reads in a **non-paired** fashion to bacterial pangenomes despite paired-end data due to polycistronic RNAs. [Read this.](https://github.com/biobakery/humann#humann-30-and-paired-end-sequencing-data)
+
+However, there is an option to use bowtie2 in paired mode (--force_paired true),if desired. This also changes the interpretration of the output files. 
 
 Mapping **RNA reads with STAR** assumes a eukaryotic/fungal genome or pangenome, mono-cistronic RNAs and will **use paired reads and output paired read counts**. 
 
@@ -113,7 +115,7 @@ Pseudoalignment of **RNA reads with Salmon** to multi-species transcriptome is a
 
 * bt2_out/DNA (for metagenomes) or bt2_out/RNA (for metatranscriptomes) for pangenome mapping results using bowtie2
     * \*bt2_microbe_pangenome_aligned.bam : BAM file after alignment of reads (non-paired manner) to pangene catalog.
-	* \*bt2_microbe_pangenome_filtered_cov.tsv : Tab separated file containing unpaired read coverage across pangenes. Only pangenes with >= 50% coverage are reported here.
+	* \*bt2_microbe_pangenome_filtered_cov.tsv : Tab separated file containing unpaired (unless chosen otherwise) read coverage across pangenes. Only pangenes with >= 50% coverage are reported here.
 	* \*bt2_microbe_pangenome.fastq.gz : All reads that did not align to the pangene catalog.
 
 * STAR_out/ (for metatranscriptomes only) RNA aligned to pangenome using STAR

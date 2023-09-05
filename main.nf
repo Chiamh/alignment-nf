@@ -65,6 +65,7 @@ def helpMessage() {
 	  --dedupe                      Deduplication for metatranscriptomes [Default: true]
 	  --map                         Map MGX and MTX reads to pangenomes [Default: true]
       --rna_mapper                  Choice of which mapper to use for metatranscriptome read mapping. Choose from: bowtie2, star or salmon [Default: bowtie2]
+      --force_paired                forces bowtie2 to map reads in paired end mode for both mtx and mgx [Default: false]
       --save_intermediates          Copy intermediate files to output directory [Default: true]
     Output arguments:
       --outdir                      The output directory where the results will be saved [Default: ./pipeline_results]
@@ -73,10 +74,10 @@ def helpMessage() {
       --awsregion                   The AWS Region for your AWS Batch job to run on [Default: false]
       --awsqueue                    The AWS queue for your AWS Batch job to run on [Default: false]
     Others:
-      --cleanup						This option will enable nextflow work/temp folder cleanup upon pipeline completion (no errors).
+      --cleanup			    This option will enable nextflow work/temp folder cleanup upon pipeline completion (no errors).
                                     All intermediate files from nexftlow processes' workdirs will be cleared. 
-									It will not clear cached folders coming from previous pipleine runs. [Default: false]
-	  --help		            Display this help message
+				    It will not clear cached folders coming from previous pipeline runs. [Default: false]
+      --help		            Display this help message
     """
 }
 
