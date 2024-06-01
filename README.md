@@ -116,12 +116,12 @@ Pseudoalignment of **RNA reads with Salmon** to multi-species transcriptome is a
 * bt2_out/DNA (for metagenomes) or bt2_out/RNA (for metatranscriptomes) for pangenome mapping results using bowtie2
     * \*bt2_microbe_pangenome_aligned.bam : BAM file after alignment of reads (non-paired manner) to pangene catalog.
 	* \*bt2_microbe_pangenome_filtered_cov.tsv : Tab separated file containing unpaired (unless chosen otherwise) read coverage across pangenes. Only pangenes with >= 50% coverage are reported here.
-	* \*bt2_microbe_pangenome.fastq.gz : All reads that did not align to the pangene catalog.
+	* \*bt2_microbe_pangenome.fastq.gz : All reads that did not align to the pangene catalog, merged into a single file.
 
-* STAR_out/ (for metatranscriptomes only) RNA aligned to pangenome using STAR
-    * \*star_microbe_pangenome_aligned.bam : BAM file after alignment of reads (PAIRED manner) to pangene catalog.
-	* \*star_microbe_pangenome_filtered_cov.tsv : Tab separated file containing PAIRED read coverage across pangenes. Only pangenes with >= 50% coverage are reported here.
-	* \*star_microbe_pangenome.fastq.gz : All reads that did not align to the pangene catalog.
+* STAR_out/ (for metatranscriptomes only) RNA aligned to pangenome/genome using STAR
+    * \*star_pangenome_aligned.bam : BAM file after alignment of reads (PAIRED manner) to pangene catalog/genome of choice.
+	* \*star_aligned_filtered_cov.tsv : Tab separated file containing PAIRED read coverage across pangenes. Only pangenes with >= 50% coverage are reported here.
+	* \*star_unaligned_{1,2}.fastq.gz : All reads that did not align to the pangene catalog.
 	
 * salmon_out/ (for metatranscriptomes only) RNA pseudoalignment to transcriptome using Salmon
 	* \*_quant.sf 
